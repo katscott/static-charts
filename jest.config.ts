@@ -1,8 +1,9 @@
-const { pathsToModuleNameMapper } = require('ts-jest/utils');
+import { pathsToModuleNameMapper } from 'ts-jest/utils';
+import type { Config } from '@jest/types';
 
-const { compilerOptions } = require('./tsconfig.json');
+import { compilerOptions } from './tsconfig.json';
 
-module.exports = {
+const config: Config.InitialOptions = {
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   moduleNameMapper: {
     ...pathsToModuleNameMapper(compilerOptions.paths),
@@ -13,3 +14,5 @@ module.exports = {
     '^.+\\.tsx?$': 'ts-jest',
   },
 };
+
+export default config;
