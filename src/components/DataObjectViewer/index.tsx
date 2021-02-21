@@ -43,10 +43,10 @@ const DataPage = (): JSX.Element => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [alertSeverity, setAlertSeverity] = useState('success' as Color);
-  const [editDataObject, setEditDataObject] = useState<string>(null);
+  const [editDataObjectKey, setEditDataObjectKey] = useState<string>(null);
 
   const handleOpenAddDataDialog = () => {
-    setEditDataObject(null);
+    setEditDataObjectKey(null);
     setOpenDataDialog(true);
   };
 
@@ -73,7 +73,7 @@ const DataPage = (): JSX.Element => {
   };
 
   const handleEditSelectedDataObject = () => {
-    setEditDataObject(selectedDataObjectKey);
+    setEditDataObjectKey(selectedDataObjectKey);
     setOpenDataDialog(true);
   };
 
@@ -95,6 +95,14 @@ const DataPage = (): JSX.Element => {
     setOpenSnackbar(true);
   };
 
+  const handleLocalStorageModifiedExternally = () => {
+    setSelectedDataObjectKey(null);
+    setEditDataObjectKey(null);
+    setAlertSeverity('error');
+    setAlertMessage('Local storage data modified externally!');
+    setOpenSnackbar(true);
+  };
+
   useEffect(() => {
     if (!dataStore) return;
 
@@ -104,6 +112,12 @@ const DataPage = (): JSX.Element => {
       setDataObjectSelectDisabled(true);
     }
   });
+
+  useEffect(() => {
+    if (!dataStore) {
+      handleLocalStorageModifiedExternally();
+    }
+  }, [dataStore]);
 
   return (
     <div className={classes.root}>
@@ -125,8 +139,8 @@ const DataPage = (): JSX.Element => {
       </Snackbar>
       <DataObjectDialog
         dataObject={
-          editDataObject
-            ? { key: editDataObject, data: dataStore[editDataObject] }
+          dataStore && editDataObjectKey
+            ? { key: editDataObjectKey, data: dataStore[editDataObjectKey] }
             : null
         }
         data-testid={DATA_OBJECT_VIEWER_DIALOG_TEST_ID}
@@ -232,9 +246,13 @@ const DataPage = (): JSX.Element => {
                   tabSize: 2,
                 }}
                 showGutter={true}
-                showPrintMargin={true}
+                showPrintMargin={false}
                 theme="textmate"
-                value={dataStore[selectedDataObjectKey] as string}
+                value={
+                  dataStore && selectedDataObjectKey
+                    ? (dataStore[selectedDataObjectKey] as string)
+                    : ''
+                }
                 wrapEnabled
                 width="100%"
               />
