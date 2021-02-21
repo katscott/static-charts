@@ -7,7 +7,10 @@
     "build": "react-static build",
     "bundle": "react-static bundle",
     "export": "react-static export",
-    "serve": "serve dist -p 3000 -s"
+    "serve": "serve dist -p 3000 -s",
+    "preinstall": "$npm_execpath --silent run checkyarn",
+    "checkyarn": "echo \"$npm_execpath\" | grep -q \"yarn\\.js$\" || (echo '⚠️  Use yarn not npm! ⚠️ ' && echo && exit 1)",
+    "lint": "eslint ."
   },
   "dependencies": {
     "axios": "^0.21.1",
@@ -29,6 +32,12 @@
     "@types/react-router": "^5.1.11",
     "@types/react-router-dom": "^5.1.7",
     "@types/webpack-env": "^1.16.0",
+    "@typescript-eslint/eslint-plugin": "^4.15.1",
+    "@typescript-eslint/parser": "^4.15.1",
+    "eslint": "^7.20.0",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "prettier": "^2.2.1",
     "react-hot-loader": "^4.13.0",
     "serve": "^11.3.2",
     "typescript": "^4.1.5"
