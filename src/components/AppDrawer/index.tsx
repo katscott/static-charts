@@ -1,8 +1,10 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { useTheme } from '@material-ui/core/styles';
 
+import AppBar from '@material-ui/core/AppBar';
+import MenuIcon from '@material-ui/icons/Menu';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
@@ -10,63 +12,95 @@ import List from '@material-ui/core/List';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
 
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import HomeIcon from '@material-ui/icons/Home';
 
-import './app.css';
 import useStyles from './useStyles';
-import { DRAWER_TEST_ID } from './constants';
+import {
+  APPBAR_TEST_ID,
+  DRAWER_MENU_ICON_TEST_ID,
+  DRAWER_MENU_ITEM_HOME_TEST_ID,
+  DRAWER_TEST_ID,
+} from './constants';
 
-interface DrawerProps {
-  open: boolean;
-}
-
-const AppDrawer: FC<DrawerProps> = ({ open }): JSX.Element => {
+const AppDrawer: FC = ({}): JSX.Element => {
   const classes = useStyles();
   const theme = useTheme();
 
-  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const handleDrawerOpen = () => {
+    setDrawerOpen(true);
+  };
 
   const handleDrawerClose = () => {
     setDrawerOpen(false);
   };
 
-  useEffect(() => {
-    setDrawerOpen(open);
-  }, [open]);
-
   return (
-    <Drawer
-      anchor="right"
-      classes={{
-        paper: classes.drawerPaper,
-      }}
-      className={classes.drawer}
-      data-testid={DRAWER_TEST_ID}
-      open={drawerOpen}
-      variant="persistent"
-    >
-      <div className={classes.drawerHeader}>
-        <IconButton onClick={handleDrawerClose}>
-          {theme.direction === 'rtl' ? (
-            <ChevronLeftIcon />
-          ) : (
-            <ChevronRightIcon />
-          )}
-        </IconButton>
-      </div>
-      <Divider />
-      <List>
-        <MenuItem button component={Link} to="/" key="Home">
-          <ListItemIcon>
-            <HomeIcon />
-          </ListItemIcon>
-          <ListItemText primary="Home" />
-        </MenuItem>
-      </List>
-    </Drawer>
+    <>
+      <AppBar
+        className={classes.appBar}
+        data-testid={APPBAR_TEST_ID}
+        position="fixed"
+      >
+        <Toolbar>
+          <Typography variant="h6" noWrap className={classes.title}>
+            Charts
+          </Typography>
+          <IconButton
+            aria-label="open drawer"
+            data-testid={DRAWER_MENU_ICON_TEST_ID}
+            color="inherit"
+            edge="end"
+            onClick={handleDrawerOpen}
+          >
+            <MenuIcon />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+      <Drawer
+        anchor="right"
+        classes={{
+          paper: classes.drawerPaper,
+        }}
+        className={classes.drawer}
+        data-testid={DRAWER_TEST_ID}
+        onClose={handleDrawerClose}
+        open={drawerOpen}
+        variant="persistent"
+      >
+        <div className={classes.drawerHeader}>
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === 'rtl' ? (
+              <ChevronLeftIcon />
+            ) : (
+              <ChevronRightIcon />
+            )}
+          </IconButton>
+        </div>
+        <Divider />
+        <List>
+          <MenuItem
+            button
+            component={Link}
+            data-testid={DRAWER_MENU_ITEM_HOME_TEST_ID}
+            key="Home"
+            onClick={handleDrawerClose}
+            to="/"
+          >
+            <ListItemIcon>
+              <HomeIcon />
+            </ListItemIcon>
+            <ListItemText primary="Home" />
+          </MenuItem>
+        </List>
+      </Drawer>
+    </>
   );
 };
 

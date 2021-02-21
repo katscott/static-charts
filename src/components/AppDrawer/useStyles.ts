@@ -4,6 +4,15 @@ const drawerWidth = 240;
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    appBar: {
+      transition: theme.transitions.create(['margin', 'width'], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+    },
+    title: {
+      flexGrow: 1,
+    },
     drawer: {
       width: drawerWidth,
       flexShrink: 0,
