@@ -1,6 +1,6 @@
-import React from 'react'
+import React from 'react';
 
-export default () => (
+const HomePage = (): JSX.Element => (
   <div style={{ textAlign: 'center' }}>
     <h1>
       Welcome to React-Static <br /> + TypeScript
@@ -15,4 +15,6 @@ export default () => (
       <a href="https://twitter.com/swyx">Report issues with this template</a>
     </p>
   </div>
-)
+);
+
+export default HomePage;

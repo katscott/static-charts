@@ -1,34 +1,45 @@
-import React from 'react'
-import { Root, Routes, addPrefetchExcludes } from 'react-static'
-import { Link, Route, Switch } from 'react-router-dom'
-import FancyDiv from 'components/FancyDiv'
-import Dynamic from 'containers/Dynamic'
-import './app.css'
+import React from 'react';
+import { Root, Routes } from 'react-static';
+import { Route, Switch } from 'react-router-dom';
 
-// Any routes that start with 'dynamic' will be treated as non-static routes
-addPrefetchExcludes(['dynamic'])
+import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 
-function App() {
+import CssBaseline from '@material-ui/core/CssBaseline';
+
+import AppDrawer from 'components/AppDrawer';
+
+import './app.css';
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    drawerHeader: {
+      display: 'flex',
+      alignItems: 'center',
+      padding: theme.spacing(0, 1),
+      // necessary for content to be below app bar
+      ...theme.mixins.toolbar,
+      justifyContent: 'flex-start',
+    },
+  }),
+);
+
+const App = (): JSX.Element => {
+  const classes = useStyles();
+
   return (
     <Root>
-      <nav>
-        <Link to="/">Home</Link>
-        <Link to="/about">About</Link>
-        <Link to="/blog">Blog</Link>
-        <Link to="/dynamic">Dynamic</Link>
-      </nav>
+      <CssBaseline />
+      <AppDrawer />
       <div className="content">
-        <FancyDiv>
-          <React.Suspense fallback={<em>Loading...</em>}>
-            <Switch>
-            <Route path="/dynamic" component={Dynamic} />
+        <div className={classes.drawerHeader} />
+        <React.Suspense fallback={<em>Loading...</em>}>
+          <Switch>
             <Route render={() => <Routes />} />
           </Switch>
-          </React.Suspense>
-        </FancyDiv>
+        </React.Suspense>
       </div>
     </Root>
-  )
-}
+  );
+};
 
-export default App
+export default App;
