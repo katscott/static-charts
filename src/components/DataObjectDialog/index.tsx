@@ -16,6 +16,12 @@ import 'ace-builds/src-noconflict/mode-json';
 import 'ace-builds/src-noconflict/theme-textmate';
 
 import useDataStore from '~/hooks/useDataStore';
+import {
+  DATA_OBJECT_DIALOG_CANCEL_TEST_ID,
+  DATA_OBJECT_DIALOG_EDITOR_TEST_ID,
+  DATA_OBJECT_DIALOG_KEY_TEST_ID,
+  DATA_OBJECT_DIALOG_SAVE_TEST_ID,
+} from './constants';
 
 const useStyles = makeStyles((_theme: Theme) =>
   createStyles({
@@ -105,6 +111,7 @@ const DataObjectDialog: FC<DataObjectDialogProps> = ({
           >
             <Grid item xs={12}>
               <TextField
+                data-testid={DATA_OBJECT_DIALOG_KEY_TEST_ID}
                 disabled={!!dataObject}
                 fullWidth
                 id="dataObjectKey"
@@ -116,35 +123,46 @@ const DataObjectDialog: FC<DataObjectDialogProps> = ({
               />
             </Grid>
             <Grid item xs={12}>
-              <AceEditor
-                className={classes.codeEditor}
-                enableBasicAutocompletion={true}
-                enableLiveAutocompletion={true}
-                enableSnippets={false}
-                fontSize={14}
-                mode="json"
-                name="dataObjectValue"
-                onChange={handleDataObjectValueChange}
-                placeholder="Data object value"
-                setOptions={{
-                  showLineNumbers: true,
-                  tabSize: 2,
-                }}
-                showGutter={true}
-                showPrintMargin={false}
-                theme="textmate"
-                value={dataObjectValue}
-                width="100%"
-                wrapEnabled
-              />
+              <div data-testid={DATA_OBJECT_DIALOG_EDITOR_TEST_ID}>
+                <AceEditor
+                  className={classes.codeEditor}
+                  enableBasicAutocompletion={true}
+                  enableLiveAutocompletion={true}
+                  enableSnippets={false}
+                  fontSize={14}
+                  mode="json"
+                  name="dataObjectValue"
+                  onChange={handleDataObjectValueChange}
+                  placeholder="Data object value"
+                  setOptions={{
+                    showLineNumbers: true,
+                    tabSize: 2,
+                  }}
+                  showGutter={true}
+                  showPrintMargin={false}
+                  theme="textmate"
+                  value={dataObjectValue}
+                  width="100%"
+                  wrapEnabled
+                />
+              </div>
             </Grid>
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button color="primary" onClick={onClose}>
+          <Button
+            color="primary"
+            data-testid={DATA_OBJECT_DIALOG_CANCEL_TEST_ID}
+            onClick={onClose}
+          >
             Cancel
           </Button>
-          <Button color="primary" type="submit" variant="contained">
+          <Button
+            color="primary"
+            data-testid={DATA_OBJECT_DIALOG_SAVE_TEST_ID}
+            type="submit"
+            variant="contained"
+          >
             Save
           </Button>
         </DialogActions>
