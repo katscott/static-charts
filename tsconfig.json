@@ -14,9 +14,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "paths": {
-      "components/*": ["src/components/*"],
-      "containers/*": ["src/containers/*"],
-      "types/*": ["types/*"]
+      "~/*": ["src/*"]
     },
     "preserveConstEnums": true,
     "removeComments": false,
