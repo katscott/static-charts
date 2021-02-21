@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
 
-import {
-  Button,
-  Grid,
-  Snackbar,
-  TextField,
-  Theme,
-  Typography,
-} from '@material-ui/core';
-import MuiAlert, { AlertProps, Color } from '@material-ui/lab/Alert';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import Snackbar from '@material-ui/core/Snackbar';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import MuiAlert, { Color } from '@material-ui/lab/Alert';
+
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import AceEditor from 'react-ace';
@@ -20,25 +17,17 @@ import 'ace-builds/src-noconflict/theme-textmate';
 import useDataStore from '~/hooks/useDataStore';
 import DataObjectDialog from '~/components/DataObjectDialog';
 
-function Alert(props: AlertProps) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      flex: 1,
-    },
-    dataStore: {
-      marginTop: '15px',
-      height: 400,
-      width: '100%',
-    },
-    textField: {
-      marginTop: theme.spacing(1),
-    },
-  }),
-);
+import useStyles from './useStyles';
+import {
+  DATA_OBJECT_VIEWER_ADD_TEST_ID,
+  DATA_OBJECT_VIEWER_CODE_TEST_ID,
+  DATA_OBJECT_VIEWER_DELETE_TEST_ID,
+  DATA_OBJECT_VIEWER_DIALOG_TEST_ID,
+  DATA_OBJECT_VIEWER_EDIT_TEST_ID,
+  DATA_OBJECT_VIEWER_SELECT_LIST_TEST_ID,
+  DATA_OBJECT_VIEWER_SELECT_TEST_ID,
+  DATA_OBJECT_VIEWER_SNACKBAR_TEST_ID,
+} from './constants';
 
 const DataPage = (): JSX.Element => {
   const classes = useStyles();
@@ -120,13 +109,19 @@ const DataPage = (): JSX.Element => {
     <div className={classes.root}>
       <Snackbar
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={openSnackbar}
         autoHideDuration={6000}
+        data-testid={DATA_OBJECT_VIEWER_SNACKBAR_TEST_ID}
         onClose={handleCloseSnackbar}
+        open={openSnackbar}
       >
-        <Alert onClose={handleCloseSnackbar} severity={alertSeverity}>
+        <MuiAlert
+          elevation={6}
+          onClose={handleCloseSnackbar}
+          severity={alertSeverity}
+          variant="filled"
+        >
           {alertMessage}
-        </Alert>
+        </MuiAlert>
       </Snackbar>
       <DataObjectDialog
         dataObject={
@@ -134,6 +129,7 @@ const DataPage = (): JSX.Element => {
             ? { key: editDataObject, data: dataStore[editDataObject] }
             : null
         }
+        data-testid={DATA_OBJECT_VIEWER_DIALOG_TEST_ID}
         open={openDataObjectDialog}
         onClose={handleCloseAddDataDialog}
         onSave={handleOnSaveDataObject}
@@ -142,25 +138,32 @@ const DataPage = (): JSX.Element => {
         Manage locally stored data for use in charts
       </Typography>
       <Grid
+        alignItems="center"
         container
         direction="row"
         justify="flex-start"
-        alignItems="center"
         spacing={3}
       >
         <Grid item xs={8}>
           <Autocomplete
+            data-testid={DATA_OBJECT_VIEWER_SELECT_TEST_ID}
             defaultValue={selectedDataObjectKey}
-            value={selectedDataObjectKey}
             disabled={dataObjectSelectDisabled}
             disableClearable
             fullWidth
-            id="keys"
-            options={!dataStore ? [] : Object.keys(dataStore).map((k) => k)}
             getOptionLabel={(c: string) => {
               if (!c) return '';
               return c;
             }}
+            getOptionSelected={(option: string, _value: string) =>
+              option == selectedDataObjectKey
+            }
+            id="keys"
+            ListboxProps={{
+              'data-testid': DATA_OBJECT_VIEWER_SELECT_LIST_TEST_ID,
+            }}
+            onChange={handleDataObjectChange}
+            options={!dataStore ? [] : Object.keys(dataStore).map((k) => k)}
             renderInput={(params: never) => (
               <TextField
                 {...params}
@@ -168,18 +171,16 @@ const DataPage = (): JSX.Element => {
                 variant="outlined"
               />
             )}
-            onChange={handleDataObjectChange}
-            getOptionSelected={(option: string, _value: string) =>
-              option == selectedDataObjectKey
-            }
+            value={selectedDataObjectKey}
           />
         </Grid>
         <Grid item xs={4}>
           <Button
-            variant="contained"
             color="primary"
-            size="large"
+            data-testid={DATA_OBJECT_VIEWER_ADD_TEST_ID}
             onClick={handleOpenAddDataDialog}
+            size="large"
+            variant="contained"
           >
             Add data
           </Button>
@@ -195,45 +196,49 @@ const DataPage = (): JSX.Element => {
         >
           <Grid item xs={1}>
             <Button
+              color="primary"
+              data-testid={DATA_OBJECT_VIEWER_EDIT_TEST_ID}
               disabled={!selectedDataObjectKey}
               onClick={handleEditSelectedDataObject}
-              variant="contained"
-              color="primary"
               size="large"
+              variant="contained"
             >
               Edit
             </Button>
           </Grid>
           <Grid item xs={1}>
             <Button
+              color="secondary"
+              data-testid={DATA_OBJECT_VIEWER_DELETE_TEST_ID}
               disabled={!selectedDataObjectKey}
               onClick={handleDeleteSelectedDataObject}
-              variant="contained"
-              color="secondary"
               size="large"
+              variant="contained"
             >
               Delete
             </Button>
           </Grid>
           <Grid item xs={12}>
-            <AceEditor
-              placeholder="Select a data object to view"
-              mode="json"
-              theme="textmate"
-              name="chartCode"
-              fontSize={14}
-              showPrintMargin={true}
-              showGutter={true}
-              readOnly={true}
-              highlightActiveLine={true}
-              wrapEnabled
-              width="100%"
-              value={dataStore[selectedDataObjectKey] as string}
-              setOptions={{
-                showLineNumbers: true,
-                tabSize: 2,
-              }}
-            />
+            <div data-testid={DATA_OBJECT_VIEWER_CODE_TEST_ID}>
+              <AceEditor
+                fontSize={14}
+                highlightActiveLine={true}
+                mode="json"
+                name="chartCode"
+                placeholder="Select a data object to view"
+                readOnly={true}
+                setOptions={{
+                  showLineNumbers: true,
+                  tabSize: 2,
+                }}
+                showGutter={true}
+                showPrintMargin={true}
+                theme="textmate"
+                value={dataStore[selectedDataObjectKey] as string}
+                wrapEnabled
+                width="100%"
+              />
+            </div>
           </Grid>
         </Grid>
       </div>

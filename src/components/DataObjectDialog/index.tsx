@@ -38,6 +38,7 @@ const DataObjectDialog: FC<DataObjectDialogProps> = ({
   open,
   onClose,
   onSave,
+  ...props
 }) => {
   const classes = useStyles();
   const [dataStore, setDataStore] = useDataStore({});
@@ -82,11 +83,13 @@ const DataObjectDialog: FC<DataObjectDialogProps> = ({
 
   return (
     <Dialog
-      open={open}
-      onClose={onClose}
+      {...props}
       aria-labelledby="form-dialog-title"
-      maxWidth="md"
       fullWidth
+      keepMounted={true}
+      maxWidth="md"
+      onClose={onClose}
+      open={open}
     >
       <form onSubmit={handleSubmit}>
         <DialogTitle id="form-dialog-title">
@@ -94,54 +97,54 @@ const DataObjectDialog: FC<DataObjectDialogProps> = ({
         </DialogTitle>
         <DialogContent>
           <Grid
+            alignItems="stretch"
             container
             direction="column"
             justify="flex-start"
-            alignItems="stretch"
             spacing={3}
           >
             <Grid item xs={12}>
               <TextField
+                disabled={!!dataObject}
+                fullWidth
                 id="dataObjectKey"
                 label="Key"
-                value={dataObjectKey}
                 onChange={handleDataObjectKeyChange}
-                variant="outlined"
-                fullWidth
                 required
-                disabled={!!dataObject}
+                value={dataObjectKey}
+                variant="outlined"
               />
             </Grid>
             <Grid item xs={12}>
               <AceEditor
                 className={classes.codeEditor}
-                placeholder="Data object value"
-                mode="json"
-                theme="textmate"
-                name="dataObjectValue"
-                onChange={handleDataObjectValueChange}
-                fontSize={14}
-                showGutter={true}
-                highlightActiveLine={true}
-                width="100%"
-                value={dataObjectValue}
-                wrapEnabled
                 enableBasicAutocompletion={true}
                 enableLiveAutocompletion={true}
                 enableSnippets={false}
+                fontSize={14}
+                mode="json"
+                name="dataObjectValue"
+                onChange={handleDataObjectValueChange}
+                placeholder="Data object value"
                 setOptions={{
                   showLineNumbers: true,
                   tabSize: 2,
                 }}
+                showGutter={true}
+                showPrintMargin={false}
+                theme="textmate"
+                value={dataObjectValue}
+                width="100%"
+                wrapEnabled
               />
             </Grid>
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose} color="primary">
+          <Button color="primary" onClick={onClose}>
             Cancel
           </Button>
-          <Button color="primary" variant="contained" type="submit">
+          <Button color="primary" type="submit" variant="contained">
             Save
           </Button>
         </DialogActions>
