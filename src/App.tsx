@@ -1,6 +1,6 @@
 import React from 'react'
 import { Root, Routes, addPrefetchExcludes } from 'react-static'
-import { Link, Router } from '@reach/router'
+import { Link, Route, Switch } from 'react-router-dom'
 import FancyDiv from 'components/FancyDiv'
 import Dynamic from 'containers/Dynamic'
 import './app.css'
@@ -20,10 +20,10 @@ function App() {
       <div className="content">
         <FancyDiv>
           <React.Suspense fallback={<em>Loading...</em>}>
-            <Router>
-              <Dynamic path="dynamic" />
-              <Routes path="*" />
-            </Router>
+            <Switch>
+            <Route path="/dynamic" component={Dynamic} />
+            <Route render={() => <Routes />} />
+          </Switch>
           </React.Suspense>
         </FancyDiv>
       </div>
