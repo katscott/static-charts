@@ -18,11 +18,13 @@ import Typography from '@material-ui/core/Typography';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import HomeIcon from '@material-ui/icons/Home';
+import StorageIcon from '@material-ui/icons/Storage';
 
 import useStyles from './useStyles';
 import {
   APPBAR_TEST_ID,
   DRAWER_MENU_ICON_TEST_ID,
+  DRAWER_MENU_ITEM_DATA_TEST_ID,
   DRAWER_MENU_ITEM_HOME_TEST_ID,
   DRAWER_TEST_ID,
 } from './constants';
@@ -70,9 +72,10 @@ const AppDrawer: FC = ({}): JSX.Element => {
         }}
         className={classes.drawer}
         data-testid={DRAWER_TEST_ID}
+        keepMounted={true}
         onClose={handleDrawerClose}
         open={drawerOpen}
-        variant="persistent"
+        variant="temporary"
       >
         <div className={classes.drawerHeader}>
           <IconButton onClick={handleDrawerClose}>
@@ -97,6 +100,19 @@ const AppDrawer: FC = ({}): JSX.Element => {
               <HomeIcon />
             </ListItemIcon>
             <ListItemText primary="Home" />
+          </MenuItem>
+          <MenuItem
+            button
+            component={Link}
+            data-testid={DRAWER_MENU_ITEM_DATA_TEST_ID}
+            key="Data"
+            onClick={handleDrawerClose}
+            to="/data"
+          >
+            <ListItemIcon>
+              <StorageIcon />
+            </ListItemIcon>
+            <ListItemText primary="Data" />
           </MenuItem>
         </List>
       </Drawer>
