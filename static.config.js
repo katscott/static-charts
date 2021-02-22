@@ -8,6 +8,7 @@ export default {
   basePath: 'static-charts',
   plugins: [
     'jss-provider', // proper handling for material ui styles
+    'react-static-plugin-sass',
     'react-static-plugin-typescript',
     [
       require.resolve('react-static-plugin-source-filesystem'),

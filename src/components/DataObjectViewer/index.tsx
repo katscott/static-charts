@@ -89,7 +89,6 @@ const DataPage = (): JSX.Element => {
   const handleOnSaveDataObject = (key: string) => {
     setSelectedDataObjectKey(key);
     setOpenDataDialog(false);
-    setOpenSnackbar(true);
     setAlertMessage('Data saved!');
     setAlertSeverity('success');
     setOpenSnackbar(true);
