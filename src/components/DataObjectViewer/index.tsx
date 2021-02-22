@@ -81,6 +81,7 @@ const DataPage = (): JSX.Element => {
     delete dataStore[selectedDataObjectKey];
     setDataStore(dataStore);
     setSelectedDataObjectKey(null);
+    setDataObjectSelectDisabled(Object.keys(dataStore).length == 0);
     setAlertSeverity('success');
     setAlertMessage('Chart deleted!');
     setOpenSnackbar(true);
@@ -89,7 +90,6 @@ const DataPage = (): JSX.Element => {
   const handleOnSaveDataObject = (key: string) => {
     setSelectedDataObjectKey(key);
     setOpenDataDialog(false);
-    setOpenSnackbar(true);
     setAlertMessage('Data saved!');
     setAlertSeverity('success');
     setOpenSnackbar(true);
@@ -104,18 +104,15 @@ const DataPage = (): JSX.Element => {
   };
 
   useEffect(() => {
-    if (!dataStore) return;
+    if (!dataStore) {
+      handleLocalStorageModifiedExternally();
+      return;
+    }
 
     if (Object.keys(dataStore).length > 0) {
       setDataObjectSelectDisabled(false);
     } else {
       setDataObjectSelectDisabled(true);
-    }
-  });
-
-  useEffect(() => {
-    if (!dataStore) {
-      handleLocalStorageModifiedExternally();
     }
   }, [dataStore]);
 

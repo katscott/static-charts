@@ -8,7 +8,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 
 import AppDrawer from '~/components/AppDrawer';
 
-import './app.css';
+import './app.scss';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

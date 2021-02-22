@@ -52,16 +52,6 @@ const DataObjectDialog: FC<DataObjectDialogProps> = ({
   const [dataObjectKey, setDataObjectKey] = useState('');
   const [dataObjectValue, setDataObjectValue] = useState('');
 
-  useEffect(() => {
-    if (dataObject) {
-      setDataObjectKey(dataObject.key);
-      setDataObjectValue(dataObject.data);
-    } else {
-      setDataObjectKey('');
-      setDataObjectValue('');
-    }
-  }, [dataObject]);
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -70,6 +60,9 @@ const DataObjectDialog: FC<DataObjectDialogProps> = ({
       [dataObjectKey]: dataObjectValue as never,
     };
     setDataStore(newDataStore);
+
+    setDataObjectKey('');
+    setDataObjectValue('');
 
     onSave(dataObjectKey);
   };
@@ -87,6 +80,23 @@ const DataObjectDialog: FC<DataObjectDialogProps> = ({
     setDataObjectValue(newValue);
   };
 
+  const handleClose = () => {
+    setDataObjectKey('');
+    setDataObjectValue('');
+
+    onClose();
+  };
+
+  useEffect(() => {
+    if (dataObject) {
+      setDataObjectKey(dataObject.key);
+      setDataObjectValue(dataObject.data);
+    } else {
+      setDataObjectKey('');
+      setDataObjectValue('');
+    }
+  }, [dataObject]);
+
   return (
     <Dialog
       {...props}
@@ -94,7 +104,7 @@ const DataObjectDialog: FC<DataObjectDialogProps> = ({
       fullWidth
       keepMounted={true}
       maxWidth="md"
-      onClose={onClose}
+      onClose={handleClose}
       open={open}
     >
       <form onSubmit={handleSubmit}>
@@ -153,7 +163,7 @@ const DataObjectDialog: FC<DataObjectDialogProps> = ({
           <Button
             color="primary"
             data-testid={DATA_OBJECT_DIALOG_CANCEL_TEST_ID}
-            onClick={onClose}
+            onClick={handleClose}
           >
             Cancel
           </Button>
