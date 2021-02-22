@@ -103,18 +103,14 @@ const DataPage = (): JSX.Element => {
   };
 
   useEffect(() => {
-    if (!dataStore) return;
+    if (!dataStore) {
+      handleLocalStorageModifiedExternally();
+    }
 
-    if (Object.keys(dataStore).length > 0) {
+    if (dataStore && Object.keys(dataStore).length > 0) {
       setDataObjectSelectDisabled(false);
     } else {
       setDataObjectSelectDisabled(true);
-    }
-  });
-
-  useEffect(() => {
-    if (!dataStore) {
-      handleLocalStorageModifiedExternally();
     }
   }, [dataStore]);
 

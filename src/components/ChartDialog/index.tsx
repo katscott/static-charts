@@ -64,18 +64,6 @@ const ChartDialog: FC<ChartDialogProps> = ({
   const [chartType, setChartType] = useState(DEFAULT_CHART_TYPE);
   const [chartCode, setChartCode] = useState(DEFAULT_CHART_CODE);
 
-  useEffect(() => {
-    if (chart) {
-      setChartName(chart.name);
-      setChartType(chart.type);
-      setChartCode(chart.code);
-    } else {
-      setChartName(DEFAULT_CHART_NAME);
-      setChartType(DEFAULT_CHART_TYPE);
-      setChartCode(DEFAULT_CHART_CODE);
-    }
-  }, [chart]);
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -113,6 +101,18 @@ const ChartDialog: FC<ChartDialogProps> = ({
   ) => {
     setChartCode(newValue);
   };
+
+  useEffect(() => {
+    if (chart) {
+      setChartName(chart.name);
+      setChartType(chart.type);
+      setChartCode(chart.code);
+    } else {
+      setChartName(DEFAULT_CHART_NAME);
+      setChartType(DEFAULT_CHART_TYPE);
+      setChartCode(DEFAULT_CHART_CODE);
+    }
+  }, [chart]);
 
   return (
     <Dialog

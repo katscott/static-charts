@@ -102,6 +102,14 @@ const ChartViewer = (): JSX.Element => {
     setOpenSnackbar(true);
   };
 
+  const handleLocalStorageModifiedExternally = () => {
+    setSelectedChartKey(null);
+    setEditChartKey(null);
+    setAlertSeverity('error');
+    setAlertMessage('Local storage data modified externally!');
+    setOpenSnackbar(true);
+  };
+
   const createBarChart = () => {
     if (!chartStore) return;
 
@@ -141,16 +149,6 @@ const ChartViewer = (): JSX.Element => {
   };
 
   useEffect(() => {
-    if (!chartStore) return;
-
-    if (Object.keys(chartStore).length > 0) {
-      setChartSelectDisabled(false);
-    } else {
-      setChartSelectDisabled(true);
-    }
-  });
-
-  useEffect(() => {
     require('chartist-plugin-legend');
     require('chartist-plugin-tooltips-updated');
   });
@@ -169,6 +167,18 @@ const ChartViewer = (): JSX.Element => {
     }
   }, [selectedChartKey]);
 
+  useEffect(() => {
+    if (!chartStore) {
+      handleLocalStorageModifiedExternally();
+    }
+
+    if (chartStore && Object.keys(chartStore).length > 0) {
+      setChartSelectDisabled(false);
+    } else {
+      setChartSelectDisabled(true);
+    }
+  }, [chartStore]);
+
   return (
     <div className={classes.root}>
       <Snackbar
@@ -183,7 +193,7 @@ const ChartViewer = (): JSX.Element => {
         </Alert>
       </Snackbar>
       <ChartDialog
-        chart={editChartKey ? chartStore[editChartKey] : null}
+        chart={chartStore && editChartKey ? chartStore[editChartKey] : null}
         data-testid={CHART_VIEWER_DIALOG_TEST_ID}
         onClose={handleCloseChartDialog}
         onSave={handleOnSaveChart}
@@ -204,6 +214,9 @@ const ChartViewer = (): JSX.Element => {
             disableClearable
             fullWidth
             id="charts"
+            getOptionLabel={(k: string) => {
+              return chartStore[k].name;
+            }}
             ListboxProps={{
               'data-testid': CHART_VIEWER_SELECT_LIST_TEST_ID,
             }}
