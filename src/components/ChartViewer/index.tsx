@@ -25,6 +25,9 @@ import {
   CHART_VIEWER_SNACKBAR_TEST_ID,
 } from './constants';
 
+import 'chartist/dist/chartist.css';
+import 'chartist-plugin-tooltips-updated/dist/chartist-plugin-tooltip.css';
+
 const useStyles = makeStyles((_theme: Theme) =>
   createStyles({
     root: {

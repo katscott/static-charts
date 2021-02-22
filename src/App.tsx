@@ -9,7 +9,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import AppDrawer from '~/components/AppDrawer';
 
 import './app.scss';
-import 'chartist/dist/chartist.css';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
