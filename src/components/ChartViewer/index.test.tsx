@@ -12,6 +12,7 @@ import {
   CHART_VIEWER_SELECT_TEST_ID,
   CHART_VIEWER_SNACKBAR_TEST_ID,
 } from './constants';
+import { DEFAULT_CHART_CODE } from '../ChartDialog/constants';
 
 describe('components/ChartViewer', () => {
   beforeEach(() => {
@@ -52,7 +53,13 @@ describe('components/ChartViewer', () => {
   });
 
   it('select data object shows keys and enables view area on selection', async () => {
-    localStorage.setItem('charts', '{"test1":"test","test2":"test"}');
+    localStorage.setItem(
+      'charts',
+      JSON.stringify({
+        id1: { id: 'id1', name: 'test1', code: DEFAULT_CHART_CODE },
+        id2: { id: 'id2', name: 'test2', code: DEFAULT_CHART_CODE },
+      }),
+    );
 
     render(<ChartViewer />);
 
@@ -79,7 +86,13 @@ describe('components/ChartViewer', () => {
   });
 
   it('delete object clears viewer', async () => {
-    localStorage.setItem('charts', '{"test1":"test","test2":"test"}');
+    localStorage.setItem(
+      'charts',
+      JSON.stringify({
+        id1: { id: 'id1', name: 'test1', code: DEFAULT_CHART_CODE },
+        id2: { id: 'id2', name: 'test2', code: DEFAULT_CHART_CODE },
+      }),
+    );
 
     render(<ChartViewer />);
 

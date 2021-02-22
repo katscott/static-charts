@@ -62,7 +62,10 @@ describe('components/DataObjectViewer', () => {
   });
 
   it('select data object shows keys and enables view area on selection', async () => {
-    localStorage.setItem('data', '{"test1":"test","test2":"test"}');
+    localStorage.setItem(
+      'data',
+      JSON.stringify({ test1: 'test', test2: 'test' }),
+    );
 
     render(<DataObjectViewer />);
 
@@ -89,7 +92,10 @@ describe('components/DataObjectViewer', () => {
   });
 
   it('delete object clears viewer', async () => {
-    localStorage.setItem('data', '{"test1":"test","test2":"test"}');
+    localStorage.setItem(
+      'data',
+      JSON.stringify({ test1: 'test', test2: 'test' }),
+    );
 
     render(<DataObjectViewer />);
 
