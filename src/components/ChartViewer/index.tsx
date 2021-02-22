@@ -81,6 +81,7 @@ const ChartViewer = (): JSX.Element => {
   };
 
   const handleOnSaveChart = (key: string) => {
+    setEditChartKey(null);
     setSelectedChartKey(key);
     setOpenChartDialog(false);
     setAlertSeverity('success');
@@ -96,6 +97,7 @@ const ChartViewer = (): JSX.Element => {
   const handleDeleteSelectedChart = () => {
     delete chartStore[selectedChartKey];
     setChartStore(chartStore);
+    setChartSelectDisabled(Object.keys(chartStore).length == 0);
     setSelectedChartKey(null);
     setAlertSeverity('success');
     setAlertMessage('Chart deleted!');

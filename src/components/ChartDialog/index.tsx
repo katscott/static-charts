@@ -81,6 +81,10 @@ const ChartDialog: FC<ChartDialogProps> = ({
     };
     setChartStore(newCharts);
 
+    setChartName(DEFAULT_CHART_NAME);
+    setChartType(DEFAULT_CHART_TYPE);
+    setChartCode(DEFAULT_CHART_CODE);
+
     onSave(guid);
   };
 
@@ -102,6 +106,14 @@ const ChartDialog: FC<ChartDialogProps> = ({
     setChartCode(newValue);
   };
 
+  const handleClose = () => {
+    setChartName(DEFAULT_CHART_NAME);
+    setChartType(DEFAULT_CHART_TYPE);
+    setChartCode(DEFAULT_CHART_CODE);
+
+    onClose();
+  };
+
   useEffect(() => {
     if (chart) {
       setChartName(chart.name);
@@ -121,7 +133,7 @@ const ChartDialog: FC<ChartDialogProps> = ({
       fullWidth
       keepMounted={true}
       maxWidth="md"
-      onClose={onClose}
+      onClose={handleClose}
       open={open}
     >
       <form onSubmit={handleSubmit}>
@@ -211,7 +223,7 @@ const ChartDialog: FC<ChartDialogProps> = ({
           <Button
             color="primary"
             data-testid={CHART_DIALOG_CANCEL_TEST_ID}
-            onClick={onClose}
+            onClick={handleClose}
           >
             Cancel
           </Button>

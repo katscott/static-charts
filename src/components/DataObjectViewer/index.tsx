@@ -81,6 +81,7 @@ const DataPage = (): JSX.Element => {
     delete dataStore[selectedDataObjectKey];
     setDataStore(dataStore);
     setSelectedDataObjectKey(null);
+    setDataObjectSelectDisabled(Object.keys(dataStore).length == 0);
     setAlertSeverity('success');
     setAlertMessage('Chart deleted!');
     setOpenSnackbar(true);
