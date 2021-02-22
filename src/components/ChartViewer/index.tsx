@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Snackbar from '@material-ui/core/Snackbar';
 import TextField from '@material-ui/core/TextField';
-import MuiAlert, { AlertProps, Color } from '@material-ui/lab/Alert';
+import MuiAlert, { Color } from '@material-ui/lab/Alert';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import { ChartType } from '~/types';
@@ -24,10 +24,6 @@ import {
   CHART_VIEWER_SELECT_TEST_ID,
   CHART_VIEWER_SNACKBAR_TEST_ID,
 } from './constants';
-
-function Alert(props: AlertProps) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
 
 const useStyles = makeStyles((_theme: Theme) =>
   createStyles({
@@ -190,9 +186,14 @@ const ChartViewer = (): JSX.Element => {
         onClose={handleCloseSnackbar}
         open={openSnackbar}
       >
-        <Alert onClose={handleCloseSnackbar} severity={alertSeverity}>
+        <MuiAlert
+          elevation={6}
+          onClose={handleCloseSnackbar}
+          severity={alertSeverity}
+          variant="filled"
+        >
           {alertMessage}
-        </Alert>
+        </MuiAlert>
       </Snackbar>
       <ChartDialog
         chart={chartStore && editChartKey ? chartStore[editChartKey] : null}
