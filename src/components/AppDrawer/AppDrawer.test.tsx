@@ -11,6 +11,34 @@ import {
   DRAWER_TEST_ID,
 } from './constants';
 
+jest.mock('firebase/app', () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const auth: any = jest.fn().mockReturnValue({
+    initializeApp: jest.fn(),
+    signInWithRedirect: jest.fn(),
+    getRedirectResult: jest.fn().mockResolvedValue({
+      credential: {
+        providerId: 'Google',
+      },
+      user: {
+        getIdToken: jest.fn().mockResolvedValue('abc1234'),
+      },
+      additionalUserInfo: {
+        profile: {
+          email: 'test@test.com',
+          name: 'John Doe',
+        },
+      },
+    }),
+  });
+
+  auth.GoogleAuthProvider = class {
+    addScope = jest.fn();
+  };
+
+  return { apps: jest.fn(), auth };
+});
+
 describe('components/AppDrawer', () => {
   it('renders appbar, open drawer, close drawer', async () => {
     const wrapper = render(<AppDrawer />, {

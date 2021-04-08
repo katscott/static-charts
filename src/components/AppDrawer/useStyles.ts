@@ -28,6 +28,12 @@ const useStyles = makeStyles((theme: Theme) =>
       ...theme.mixins.toolbar,
       justifyContent: 'flex-start',
     },
+    signInButton: {
+      margin: '15px 0',
+    },
+    signInGrid: {
+      height: '72px',
+    },
   }),
 );
 

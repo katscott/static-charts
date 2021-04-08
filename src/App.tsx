@@ -9,6 +9,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import AppDrawer from '~/components/AppDrawer';
 
 import './app.scss';
+import UserContextProvider from './components/UserContextProvider';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -24,16 +25,18 @@ const App = (): JSX.Element => {
 
   return (
     <Root>
-      <CssBaseline />
-      <AppDrawer />
-      <div className="content">
-        <div className={classes.drawerHeader} />
-        <React.Suspense fallback={<em>Loading...</em>}>
-          <Switch>
-            <Route render={() => <Routes />} />
-          </Switch>
-        </React.Suspense>
-      </div>
+      <UserContextProvider>
+        <CssBaseline />
+        <AppDrawer />
+        <div className="content">
+          <div className={classes.drawerHeader} />
+          <React.Suspense fallback={<em>Loading...</em>}>
+            <Switch>
+              <Route render={() => <Routes />} />
+            </Switch>
+          </React.Suspense>
+        </div>
+      </UserContextProvider>
     </Root>
   );
 };
