@@ -9,7 +9,7 @@ import TextField from '@material-ui/core/TextField';
 import MuiAlert, { Color } from '@material-ui/lab/Alert';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
-import { ChartType } from '~/types';
+import { Chart, ChartType } from '~/types';
 
 import useChartStore from '~/hooks/useChartStore';
 import useDataStore from '~/hooks/useDataStore';
@@ -52,6 +52,41 @@ const ChartViewer = (): JSX.Element => {
   const [alertMessage, setAlertMessage] = useState('');
   const [alertSeverity, setAlertSeverity] = useState('success' as Color);
 
+  const createBarChart = (chart: Chart) => {
+    if (!chart) return;
+    if (!dataStore) return;
+
+    document.getElementById('chart').innerHTML = '';
+
+    let output: {
+      data: IChartistData | null;
+      options: IBarChartOptions | null;
+    } = { data: null, options: null };
+
+    try {
+      const generateOutput = eval(chart.code);
+      output = generateOutput(dataStore, Chartist);
+    } catch (e) {
+      setAlertSeverity('error');
+      setAlertMessage('Unable to render chart!');
+      setOpenSnackbar(true);
+      return;
+    }
+
+    if (!(output && output.data && output.options)) return;
+
+    new Chartist.Bar('#chart', output.data, output.options).on(
+      'draw',
+      (data: Chartist.IChartDrawBarData) => {
+        if (data.type === 'bar') {
+          data.element.attr({
+            style: 'stroke-width: 30px',
+          });
+        }
+      },
+    );
+  };
+
   const handleCloseSnackbar = (
     _event?: React.SyntheticEvent,
     reason?: string,
@@ -80,6 +115,10 @@ const ChartViewer = (): JSX.Element => {
   };
 
   const handleOnSaveChart = (key: string) => {
+    if (editChartKey) {
+      const chart = chartStore[editChartKey];
+      createBarChart(chart);
+    }
     setEditChartKey(null);
     setSelectedChartKey(key);
     setOpenChartDialog(false);
@@ -111,44 +150,6 @@ const ChartViewer = (): JSX.Element => {
     setOpenSnackbar(true);
   };
 
-  const createBarChart = () => {
-    if (!chartStore) return;
-
-    const chart = chartStore[selectedChartKey];
-    if (!chart) return;
-    if (!dataStore) return;
-
-    document.getElementById('chart').innerHTML = '';
-
-    let output: {
-      data: IChartistData | null;
-      options: IBarChartOptions | null;
-    } = { data: null, options: null };
-    try {
-      const chart = chartStore[selectedChartKey];
-      const generateOutput = eval(chart.code);
-      output = generateOutput(dataStore, Chartist);
-    } catch (e) {
-      setAlertSeverity('error');
-      setAlertMessage('Unable to render chart!');
-      setOpenSnackbar(true);
-      return;
-    }
-
-    if (!(output && output.data && output.options)) return;
-
-    new Chartist.Bar('#chart', output.data, output.options).on(
-      'draw',
-      (data: Chartist.IChartDrawBarData) => {
-        if (data.type === 'bar') {
-          data.element.attr({
-            style: 'stroke-width: 30px',
-          });
-        }
-      },
-    );
-  };
-
   useEffect(() => {
     require('chartist-plugin-legend');
     require('chartist-plugin-tooltips-updated');
@@ -163,7 +164,7 @@ const ChartViewer = (): JSX.Element => {
 
     switch (chart.type) {
       case ChartType.Bar:
-        createBarChart();
+        createBarChart(chart);
         break;
     }
   }, [selectedChartKey]);
